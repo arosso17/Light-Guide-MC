@@ -89,8 +89,12 @@ DetectorConstruction::DetectorConstruction()
   G4double rindex3[NUM] = {1.52, 1.52, 1.52, 1.52, 1.52, 1.52};
   G4double reflectivity[NUM] = {0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
 
-  G4double reflectivity2[NUM] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+  G4double reflectivity2[NUM] = {1., 1., 1., 1., 1., 1.};
+  //G4double reflectivity2[NUM] = {0.9999999, 0.9999999, 0.9999999, 0.9999999, 0.9999999, 0.9999999};
+  //G4double reflectivity2[NUM] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
   G4double tran2[NUM] = {0., 0., 0., 0., 0., 0.};
+  //G4double tran2[NUM] = {0.0000001, 0.0000001, 0.0000001, 0.0000001, 0.0000001, 0.0000001};
+  //G4double tran2[NUM] = {0.9, 0.9, 0.9, 0.9, 0.9, 0.9};
 
   G4double tran[NUM] = {0.7, 0.7, 0.7, 0.7, 0.7, 0.7};
   G4double absorption[NUM] = {3.448*m, 4.082 * m,  6.329 * m,  9.174 * m,  12.346 * m, 13.889 * m};
@@ -101,6 +105,8 @@ DetectorConstruction::DetectorConstruction()
 
   fSurfaceMPT2->AddProperty("REFLECTIVITY", pp, reflectivity2, NUM);
   fSurfaceMPT2->AddProperty("TRANSMITTANCE", pp, tran2, NUM);
+  fSurfaceMPT->AddProperty("REFLECTIVITY", pp, reflectivity2, NUM);
+  fSurfaceMPT->AddProperty("TRANSMITTANCE", pp, tran2, NUM);
 
   fWorldMPT->AddProperty("RINDEX", pp, rindex2, NUM);
   fScintMPT->AddProperty("RINDEX", pp, rindex3, NUM);
@@ -185,8 +191,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Box* rect_mid_curve = new G4Box("TwistedStrip", width, thick, l);
   G4Box* rect_mid_straight = new G4Box("rect_mid2", width, thick, len / 2);
   G4UnionSolid* rect_mid = new G4UnionSolid("rect_mid", rect_mid_straight, rect_mid_curve, 0, G4ThreeVector(0, 0, -l-len/2));
-  G4cout << "G4UnionSolid G4ThreeVector: " << "0" << " , " << "0" << " , " << -l-len/2 << G4endl;
-  G4cout << "Rotation: " << Rot << G4endl;
+  G4cout << "================" << G4endl;
+  G4cout << std::setprecision(8) << "G4UnionSolid G4ThreeVector: " << "0" << " , " << "0" << " , " << -l-len/2 << G4endl;
+  G4cout << "================" << G4endl;
 
   rect_mid_LV = new G4LogicalVolume(rect_mid, fTankMaterial, "rect_mid", 0, 0, 0);
   rect_mid_PV = new G4PVPlacement(0, G4ThreeVector(0, 0, -len/2), rect_mid_LV, "rect_mid", fWorld_LV, false, 0, true);
